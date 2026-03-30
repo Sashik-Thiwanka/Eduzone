@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Eduzone Education Centre</title>
+    
+    <style>
+        /* ---------------------------------------------------- */
+        /* 1. THEME VARIABLES (Inherited from the main site) */
+        /* ---------------------------------------------------- */
+        :root {
+            /* Light Theme */
+            --color-bg-main: #f0f8ff; 
+            --color-bg-secondary: #ffffff; 
+            --color-text-primary: #343a40; 
+            --color-text-secondary: #6c757d;
+            --color-accent: #007bff; 
+            --color-header-bg: #ffffff;
+            --color-input-bg: #f8f9fa;
+        }
+
+        /* Dark Theme Overrides (Deep Navy & Royal Gold) */
+        .dark-theme {
+            --color-bg-main: #0f172a; 
+            --color-bg-secondary: #1e293b; 
+            --color-text-primary: #f1f5f9; 
+            --color-text-secondary: #94a3b8; 
+            --color-accent: #facc15; 
+            --color-header-bg: #1e293b;
+            --color-input-bg: #334155; 
+        }
+
+        /* ---------------------------------------------------- */
+        /* 2. BASE & LAYOUT STYLES */
+        /* ---------------------------------------------------- */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-bg-main);
+            color: var(--color-text-primary);
+            transition: background-color 0.5s ease, color 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .register-container {
+            display: flex;
+            width: 90%;
+            max-width: 1100px;
+            min-height: 700px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 40px auto;
+            background-color: var(--color-bg-secondary);
+        }
+        
+        /* ---------------------------------------------------- */
+        /* 3. NEW: THEME TOGGLE BUTTON STYLES (Fixed Position) */
+        /* ---------------------------------------------------- */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: 2px solid var(--color-text-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em; 
+            padding: 10px;
+            color: var(--color-text-primary); 
+            transition: all 0.3s ease;
+            line-height: 1; 
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            color: var(--color-accent);
+            border-color: var(--color-accent);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--color-accent);
+        }
+
+        body:not(.dark-theme) .theme-toggle::before {
+            content: '☀️'; 
+        }
+        .dark-theme .theme-toggle::before {
+            content: '🌙'; 
+        }
+        /* ---------------------------------------------------- */
+
+        /* ---------------------------------------------------- */
+        /* 4. INFO SIDE (PROMOTION) */
+        /* ---------------------------------------------------- */
+        .info-side {
+            flex: 1;
+            background: linear-gradient(135deg, var(--color-accent), #ff9900);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .dark-theme .info-side {
+            background: linear-gradient(135deg, #0e7490, #155e75);
+            color: var(--color-text-primary);
+        }
+
+        .info-side h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .info-side p {
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            max-width: 350px;
+        }
+
+        .login-link {
+            display: inline-block;
+            padding: 12px 25px;
+            border: 2px solid white;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .login-link:hover {
+            background-color: white;
+            color: #007bff; 
+        }
+        
+        .dark-theme .login-link {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+        .dark-theme .login-link:hover {
+            background-color: var(--color-accent);
+            color: var(--color-bg-secondary);
+        }
+
+        /* ---------------------------------------------------- */
+        /* 5. FORM SIDE */
+        /* ---------------------------------------------------- */
+        .form-side {
+            flex: 1.5;
+            padding: 50px;
+            background-color: var(--color-bg-secondary);
+        }
+
+        .form-side h2 {
+            text-align: center;
+            color: var(--color-accent);
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1; 
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-text-secondary);
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: var(--color-input-bg);
+            color: var(--color-text-primary);
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 5px rgba(250, 204, 21, 0.5); 
+            outline: none;
+        }
+
+        /* Checkbox and Terms */
+        .terms-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .terms-group input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--color-accent);
+        }
+
+        .terms-group label {
+            font-size: 0.9em;
+            font-weight: 400;
+        }
+
+        /* Button */
+        .register-button {
+            background-color: var(--color-accent);
+            color: var(--color-bg-secondary);
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .register-button:hover {
+            background-color: #eab308; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* ---------------------------------------------------- */
+        /* 6. RESPONSIVENESS */
+        /* ---------------------------------------------------- */
+        @media (max-width: 992px) {
+            .register-container {
+                flex-direction: column;
+                width: 95%;
+                min-height: auto;
+            }
+            .info-side {
+                order: -1; 
+                padding: 30px;
+                border-radius: 15px 15px 0 0;
+            }
+            .form-side {
+                padding: 30px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            /* Move toggle button slightly down on mobile if it blocks header content */
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px;
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body id="body" class="dark-theme"> 
+    
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode"></button>
+
+    <div class="register-container">
+        
+        <div class="form-side">
+            <h2>Create Your Eduzone Account</h2>
+            
+            <form action="process_registration.php" method="POST">
+                
+                <div class="form-grid">
+                    
+                    <div class="form-group">
+                        <label for="first-name">First Name <span style="color: red;">*</span></label>
+                        <input type="text" id="first-name" name="first-name" required placeholder="Ex: Nimal">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="last-name">Last Name <span style="color: red;">*</span></label>
+                        <input type="text" id="last-name" name="last-name" required placeholder="Ex: Perera">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address <span style="color: red;">*</span></label>
+                        <input type="email" id="email" name="email" required placeholder="Ex: example@student.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span style="color: red;">*</span></label>
+                        <input type="text" id="phone" name="phone" required placeholder="Ex: 077 123 4567">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stream">A/L Stream <span style="color: red;">*</span></label>
+                        <select id="stream" name="stream" required>
+                            <option value="" disabled selected>Select Your Stream</option>
+                            <option value="maths">Combined Mathematics</option>
+                            <option value="science">Science (Bio/Physical)</option>
+                            <option value="commerce">Commerce</option>
+                            <option value="arts">Arts</option>
+                            <option value="ict">Technology (ICT)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="year">A/L Year (Expected) <span style="color: red;">*</span></label>
+                        <select id="year" name="year" required>
+                            <option value="" disabled selected>Select Year</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="other">Other/Repeat</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password <span style="color: red;">*</span></label>
+                        <input type="password" id="password" name="password" required minlength="8" placeholder="Must be 8+ characters">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password <span style="color: red;">*</span></label>
+                        <input type="password" id="confirm-password" name="confirm-password" required minlength="8" placeholder="Re-enter your password">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <div class="terms-group">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <label for="terms">I agree to the <a href="terms.html" style="color: var(--color-accent); text-decoration: none;">Terms of Service</a> and Privacy Policy.</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="register-button">Register Account</button>
+            </form>
+        </div>
+
+        <div class="info-side">
+            <h2>Welcome to Eduzone!</h2>
+            <p>Access thousands of past papers, expert video lessons, and model exams to achieve guaranteed success in your A/L examination.</p>
+            <p style="font-size: 0.9em; margin-bottom: 20px;">Already have an account?</p>
+            <a href="contact.html" class="login-link">Login Here &rarr;</a>
+        </div>
+        
+    </div>
+    
+    <script>
+        // Simple client-side password validation (for UX, server-side is mandatory)
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(event) {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                alert('Error: Passwords do not match!');
+                event.preventDefault(); // Stop form submission
+                confirmPasswordInput.focus();
+            }
+        });
+        
+        // ----------------------------------------------------
+        // ADDED: THEME TOGGLE FUNCTIONALITY
+        // ----------------------------------------------------
+        const body = document.getElementById('body');
+        const darkThemeClass = 'dark-theme';
+
+        function setTheme(isDark) {
+            if (isDark) {
+                body.classList.add(darkThemeClass);
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove(darkThemeClass);
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = body.classList.contains(darkThemeClass);
+            setTheme(!isDark);
+        }
+
+        // Theme initialization script
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark') {
+                body.classList.add(darkThemeClass);
+            } else if (savedTheme === 'light') {
+                body.classList.remove(darkThemeClass);
+            } else {
+                // Default behavior: Check system preference or default to light/dark
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    body.classList.add(darkThemeClass);
+                } else {
+                     body.classList.remove(darkThemeClass); 
+                }
+            }
+        })();
+    </script>
+
+</body>
+</html>

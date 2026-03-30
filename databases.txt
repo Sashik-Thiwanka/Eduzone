@@ -1,0 +1,79 @@
+CREATE TABLE persistent_logins (
+    series_id VARCHAR(20) NOT NULL PRIMARY KEY, -- Used to look up the token (Selector)
+    token VARCHAR(64) NOT NULL,                 -- The token itself (Hashed)
+    user_id INT(11) NOT NULL,
+    last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE feedback (
+    feedback_id INT(11) NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    comment TEXT NOT NULL,
+    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (feedback_id)
+);
+
+CREATE TABLE users (
+    user_id INT(11) NOT NULL AUTO_INCREMENT,
+    full_name VARCHAR(255) NOT NULL,
+    user_name VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id)
+);
+
+CREATE TABLE pastpapers (
+    paper_id INT(11) NOT NULL AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    subject VARCHAR(100) NOT NULL,
+    exam_level VARCHAR(50) NOT NULL,
+    exam_year YEAR NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    uploaded_by INT(11) NULL,
+    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (paper_id),
+    FOREIGN KEY (uploaded_by) REFERENCES users(user_id) ON DELETE SET NULL
+);
+
+ALTER TABLE users 
+ADD COLUMN reset_token VARCHAR(255) NULL AFTER password,
+ADD COLUMN token_expiry DATETIME NULL AFTER reset_token;
+
+-- 1. Create the Main Quizzes Table
+CREATE TABLE IF NOT EXISTS quizzes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    subject VARCHAR(100) NOT NULL,
+    difficulty ENUM('Easy', 'Medium', 'Hard') DEFAULT 'Medium',
+    time_limit INT NOT NULL COMMENT 'In minutes',
+    question_count INT NOT NULL,
+    education_level ENUM('OL', 'AL') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Create the Questions Table
+CREATE TABLE IF NOT EXISTS questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    quiz_id INT NOT NULL,
+    question_text TEXT NOT NULL,
+    option_a VARCHAR(255) NOT NULL,
+    option_b VARCHAR(255) NOT NULL,
+    option_c VARCHAR(255) NOT NULL,
+    option_d VARCHAR(255) NOT NULL,
+    correct_option CHAR(1) NOT NULL COMMENT 'A, B, C, or D',
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);
+
+-- 3. Insert Professional Sample Data
+INSERT INTO quizzes (title, subject, difficulty, time_limit, question_count, education_level) VALUES
+('Python Basics', 'ICT', 'Easy', 10, 2, 'OL'),
+('Newtonian Mechanics', 'Physics', 'Hard', 20, 2, 'AL');
+
+-- 4. Insert Sample Questions for Python Basics (Quiz ID: 1)
+INSERT INTO questions (quiz_id, question_text, option_a, option_b, option_c, option_d, correct_option) VALUES
+(1, 'Which keyword is used to define a function in Python?', 'func', 'define', 'def', 'function', 'C'),
+(1, 'What is the correct file extension for Python files?', '.pyt', '.py', '.python', '.pt', 'B');
